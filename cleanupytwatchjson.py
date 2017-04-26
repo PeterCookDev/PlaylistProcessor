@@ -1,19 +1,20 @@
-import link_processing as lp
 import os
-import markdown_file_processing as mfp
 import json
 import codecs
+
+import link_processing as lp
+import markdown_file_processing as mfp
 
 
 
 def process_json_file_to_dictionary(fullpath, known_urls):
     links = []
-    with codecs.open(fullpath, "r", encoding='ascii', errors='ignore') as data_file:    
+    with codecs.open(fullpath, "r", encoding='ascii', errors='ignore') as data_file:
         data = json.load(data_file)
         for data_item in data:
             title = data_item['snippet']['title'].strip()
-            snippetId = 'https://www.youtube.com/watch?v=' + data_item['contentDetails']['videoId']
-            current_line = '[' + title + '](' + snippetId + ')'
+            snippet_id = 'https://www.youtube.com/watch?v=' + data_item['contentDetails']['videoId']
+            current_line = '[' + title + '](' + snippet_id + ')'
             links.append(current_line)
     return links
 
