@@ -1,13 +1,12 @@
 import stringprocessing as sp
 
-
 def find_new_links(links, known_links):
     new_links = []
 
-    for s in links:
-        url = sp.get_url_from_line(s)
+    for link in links:
+        url = sp.get_url_from_line(link)
         if url not in known_links:
-            new_links.append(token_replacement(s))
+            new_links.append(token_replacement(link))
 
     return new_links
 

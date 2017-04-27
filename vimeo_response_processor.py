@@ -10,7 +10,7 @@ class VimeoResponseProcessor(FileProcessor):
     def __init__(self, input_path):
         super().__init__(input_path)
 
-    def _process_json_file_to_dictionary(self, data_file):
+    def process_json_file_to_dictionary(self, data_file):
         links = []
         data = json.loads(data_file)
         for data_item in data['body']['data']:
@@ -22,7 +22,7 @@ class VimeoResponseProcessor(FileProcessor):
         return links
 
 
-    def _clean_up_vimeo_api(self, response_body):
+    def clean_up_vimeo_api(self, response_body):
         body = response_body.replace("   ", "")
         body = body.replace('\\\\\\"', "\\")
         body = body.replace('\\n', '')
@@ -33,25 +33,25 @@ class VimeoResponseProcessor(FileProcessor):
         return body
 
 
-    def _preprocess_json(self, fullpath):
+    def preprocess_json(self, fullpath):
         with codecs.open(fullpath, "r", encoding='ascii', errors='ignore') as data_file:
             data = data_file.read()
             data_file.close()
 
         new_filename = fullpath + ".new"
-        body = self._clean_up_vimeo_api(data)
+        body = self.clean_up_vimeo_api(data)
         return body
 
-    def _process_json(self, inputpath):
+    def process_json(self, inputpath):
         known_urls = []
         all_files = os.listdir(inputpath)
         for filename in all_files:
             if filename.endswith(".response"):
                 full_path = inputpath + "\\" + filename
-                body = self._preprocess_json(full_path)
-                known_urls.extend(self._process_json_file_to_dictionary(body))
+                body = self.preprocess_json(full_path)
+                known_urls.extend(self.process_json_file_to_dictionary(body))
 
         return known_urls
 
     def process_files(self):
-        return self._process_json(self.input_path)
+        return self.process_json(self.input_path)
